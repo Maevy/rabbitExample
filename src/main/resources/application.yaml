@@ -1,0 +1,24 @@
+spring:
+  rabbitmq:
+    host: localhost
+    virtual-host: /
+    username: guest
+    password: guest
+    listener:
+      simple:
+        acknowledge-mode: auto
+        concurrency: 1
+        retry:
+          enabled: true
+          initial-interval: 3s
+          max-attempts: 3
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+rabbitexample:
+  amqp:
+    exchange-name: ex
+    in-queue: example-person
+    dlq-queue: example-person-dlq
+    out-queue: example
+

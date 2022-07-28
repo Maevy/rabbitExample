@@ -1,0 +1,51 @@
+openapi: 3.0.3
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+paths:
+  /person:
+    get:
+      description: 'Doing cool stuff over here'
+      operationId: getPerson
+      tags:
+        - Person
+      parameters:
+        - name: person_name
+          in: query
+          description: 'The name of person.'
+          required: false
+          schema:
+            type: string
+        - name: person_type
+          in: query
+          description: 'Type of person.'
+          required: false
+          schema:
+            type: string
+            enum:
+              - EMPLOYEE
+              - CUSTOMER
+      responses:
+        200:
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+components:
+  schemas:
+    Person:
+      description: 'The person data.'
+      type: object
+      properties:
+        name:
+          description: 'The name of person.'
+          type: string
+        createdAt:
+          description: 'Creation time of this entity.'
+          type: string
+          format: date-time
+        inputParam:
+          description: 'what you write is what you get'
+          type: string
