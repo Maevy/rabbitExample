@@ -9,12 +9,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import com.example.rabbitexample.infrastructure.amqp.RabbitExampleProperties;
 import com.example.rabbitexample.rest.ui.model.Person;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -23,6 +25,7 @@ import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@ExtendWith(SpringExtension.class)
 @EnableConfigurationProperties({RabbitExampleProperties.class})
 @Testcontainers
 @DirtiesContext
@@ -36,7 +39,7 @@ class RabbitExampleIT {
 
   @DynamicPropertySource
   static void containerProperties(DynamicPropertyRegistry registry) {
-    registry.add("spring.rabbitmq.host", () -> rabbitMq.getHost());
+    registry.add("spring.rabbitmq.host", rabbitMq::getHost);
     registry.add("spring.rabbitmq.port", () -> rabbitMq.getMappedPort(5672).toString());
   }
 
@@ -49,11 +52,12 @@ class RabbitExampleIT {
 //        .jsonPath("$.inputParam").isEqualTo("Jackson");
 //  }
 
-    @Test
-  void testRestReactive() {
+  @Test
+  void testReactive() {
     webTestClient.get().uri(uriBuilder -> uriBuilder.path("/person").queryParam("person_name", "Jackson").build())
-        .exchange().expectStatus().isOk().returnResult(Person.class).getResponseBody().as(StepVerifier::create)
-        .assertNext(person -> assertThat(person.getName(), is(equalTo("Jackson")))).verifyComplete();
+        .exchange().expectStatus().isOk().returnResult(Person.class).getResponseBody().as(StepVerifier::create).assertNext(person -> assertThat(person.getName(), is(equalTo("Jackson"))))
+        .verifyComplete();
+
   }
 
 }

@@ -1,0 +1,32 @@
+{
+  "$id": "http://localhost:8080/person/employee.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Object to identify an employee.",
+  "definitions": {
+    "Employee": {
+      "type": "object",
+      "description": "the employee which works at Ubercorp.",
+      "properties": {
+        "name": {
+          "description": "employee name",
+          "type": "string"
+        },
+        "jobDescription": {
+          "description": "The description of his activity.",
+          "type": "string",
+          "enum": [
+            "ACCOUNTANT",
+            "JANITOR",
+            "DEVELOPER"
+          ]
+        },
+        "employmentDate": {
+          "description": "the date of employment.",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
