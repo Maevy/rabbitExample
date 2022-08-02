@@ -16,7 +16,6 @@ public class PersonQueueProducer {
 
   private final RabbitExampleProperties rabbitExampleProperties;
 
-  // ich habe mir hier ne Domain Entity gespart. Falls Entity geschickt wird dann domain package, ansonsten Service package
   public void sendPerson(Person aPerson) {
     log.info("SENDING PERSON TO QUEUE !");
     rabbitTemplate.convertAndSend(rabbitExampleProperties.getExchangeName(),rabbitExampleProperties.getOutQueue(), aPerson);
